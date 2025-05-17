@@ -16,7 +16,7 @@ interface Incident {
   description: string;
 }
 
-const StatusPublicPage = () => {
+const PublicStatusPage = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [incidents, setIncidents] = useState<Incident[]>([]);
   const [loading, setLoading] = useState(true);
@@ -43,76 +43,111 @@ const StatusPublicPage = () => {
     fetchData();
   }, []);
 
+  const getStatusStyle = (status: string) => {
+    switch (status) {
+      case 'operational':
+        return 'bg-green-100 text-green-800';
+      case 'degraded':
+        return 'bg-yellow-100 text-yellow-800';
+      default:
+        return 'bg-red-100 text-red-800';
+    }
+  };
+
   if (loading) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="text-center">Loading status information...</div>
+      <div className="h-full flex flex-col">
+        <div className="px-6 py-4 bg-white shadow-sm">
+          <h1 className="text-2xl font-bold">System Status</h1>
+        </div>
+        <div className="flex-1 p-6">
+          <div className="text-center py-12">Loading status information...</div>
+        </div>
       </div>
     );
   }
 
   if (error) {
     return (
-      <div className="container mx-auto p-4">
-        <div className="text-red-500 text-center">{error}</div>
+      <div className="h-full flex flex-col">
+        <div className="px-6 py-4 bg-white shadow-sm">
+          <h1 className="text-2xl font-bold">System Status</h1>
+        </div>
+        <div className="flex-1 p-6">
+          <div className="text-red-500 text-center py-12">{error}</div>
+        </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-2xl font-bold mb-8">System Status</h1>
-      
-      <div className="mb-8">
-        <h2 className="text-xl font-semibold mb-4">Services</h2>
-        <div className="grid gap-4">
-          {services.map((service) => (
-            <div 
-              key={service.id}
-              className="p-4 border rounded-lg shadow-sm"
-            >
-              <div className="flex items-center justify-between">
-                <h3 className="font-medium">{service.name}</h3>
-                <span className={`px-3 py-1 rounded-full text-sm ${
-                  service.status === 'operational' ? 'bg-green-100 text-green-800' :
-                  service.status === 'degraded' ? 'bg-yellow-100 text-yellow-800' :
-                  'bg-red-100 text-red-800'
-                }`}>
-                  {service.status}
-                </span>
-              </div>
-              <p className="text-gray-600 mt-2">{service.description}</p>
-            </div>
-          ))}
-        </div>
+    <div className="h-full flex flex-col">
+      {/* Fixed header section */}
+      <div className="px-6 py-4 bg-white shadow-sm border-b">
+        <h1 className="text-2xl font-bold">System Status</h1>
       </div>
 
-      <div>
-        <h2 className="text-xl font-semibold mb-4">Active Incidents</h2>
-        <div className="grid gap-4">
-          {incidents.length === 0 ? (
-            <p className="text-gray-600">No active incidents</p>
-          ) : (
-            incidents.map((incident) => (
-              <div 
-                key={incident.id}
-                className="p-4 border rounded-lg shadow-sm"
-              >
-                <h3 className="font-medium">{incident.title}</h3>
-                <p className="text-sm text-gray-500 mt-1">
-                  Status: {incident.status}
-                </p>
-                <p className="text-gray-600 mt-2">{incident.description}</p>
-                <p className="text-sm text-gray-500 mt-2">
-                  {new Date(incident.created_at).toLocaleString()}
-                </p>
+      {/* Main content with fixed height containers that scroll independently */}
+      <div className="flex-1 p-6 overflow-hidden">
+        <div className="max-w-6xl mx-auto h-full flex flex-col">
+          {/* Services Section - scrollable box with grid layout */}
+          <div className="mb-6 h-[60vh]">
+            <h2 className="text-xl font-semibold mb-2">Services</h2>
+            <div className="border rounded-lg shadow-sm bg-gray-50 p-4 h-[calc(100%-2rem)] overflow-hidden">
+              <div className="h-full overflow-auto">
+                <div className="grid grid-cols-3 gap-4 auto-rows-max">
+                  {services.map((service) => (
+                    <div 
+                      key={service.id}
+                      className="p-4 bg-white border rounded-lg shadow-sm"
+                    >
+                      <div className="flex items-center justify-between">
+                        <h3 className="font-medium">{service.name}</h3>
+                        <span className={`px-3 py-1 rounded-full text-sm ${getStatusStyle(service.status)}`}>
+                          {service.status}
+                        </span>
+                      </div>
+                      <p className="text-gray-600 mt-2 text-sm">{service.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
-            ))
-          )}
+            </div>
+          </div>
+
+          {/* Active Incidents Section - scrollable box with grid layout */}
+          <div className="h-[60vh]">
+            <h2 className="text-xl font-semibold mb-2">Active Incidents</h2>
+            <div className="border rounded-lg shadow-sm bg-gray-50 p-4 h-[calc(100%-2rem)] overflow-hidden">
+              <div className="h-full overflow-auto">
+                {incidents.length === 0 ? (
+                  <p className="text-gray-600 p-4 bg-white rounded-lg">No active incidents</p>
+                ) : (
+                  <div className="grid grid-cols-2 gap-4 auto-rows-max">
+                    {incidents.map((incident) => (
+                      <div 
+                        key={incident.id}
+                        className="p-4 bg-white border rounded-lg shadow-sm"
+                      >
+                        <h3 className="font-medium">{incident.title}</h3>
+                        <p className="text-sm text-gray-500 mt-1">
+                          Status: <span className="font-medium">{incident.status}</span>
+                        </p>
+                        <p className="text-gray-600 mt-2 text-sm">{incident.description}</p>
+                        <p className="text-sm text-gray-500 mt-2">
+                          {new Date(incident.created_at).toLocaleString()}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default StatusPublicPage;
+export default PublicStatusPage;

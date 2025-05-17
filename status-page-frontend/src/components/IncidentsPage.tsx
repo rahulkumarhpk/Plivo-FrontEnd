@@ -41,7 +41,7 @@ const IncidentsPage = () => {
   };
 
   return (
-    <div>
+    <div className="w-full">
       <h2 className="text-2xl font-bold mb-6">Incidents Management</h2>
 
       <div className="mb-6 p-4 bg-white rounded shadow max-w-lg">
@@ -92,16 +92,6 @@ const IncidentsPage = () => {
         </button>
       </div>
 
-      <div>
-        {incidentsQuery.data?.map((incident) => (
-          <IncidentCard
-            key={incident.id}
-            incident={incident}
-            onUpdateStatus={onUpdateStatus}
-            onDelete={onDelete}
-          />
-        ))}
-      </div>
     </div>
   );
 };
