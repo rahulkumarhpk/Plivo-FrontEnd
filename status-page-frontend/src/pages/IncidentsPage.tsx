@@ -139,7 +139,7 @@ const IncidentsPage = () => {
                   type="text"
                   value={formData.title}
                   onChange={(e) => setFormData({...formData, title: e.target.value})}
-                  className="w-full border rounded p-2"
+                  className="w-full border rounded p-2 bg-white"
                   required
                 />
               </div>
@@ -148,7 +148,7 @@ const IncidentsPage = () => {
                 <textarea
                   value={formData.description}
                   onChange={(e) => setFormData({...formData, description: e.target.value})}
-                  className="w-full border rounded p-2"
+                  className="w-full border rounded p-2 bg-white"
                   required
                   rows={3}
                 />
@@ -158,7 +158,7 @@ const IncidentsPage = () => {
                 <select
                   value={formData.status}
                   onChange={(e) => setFormData({...formData, status: e.target.value})}
-                  className="w-full border rounded p-2"
+                  className="w-full border rounded p-2 bg-white"
                 >
                   <option value="investigating">Investigating</option>
                   <option value="open">Open</option>
@@ -176,7 +176,7 @@ const IncidentsPage = () => {
                       type="number"
                       value={formData.service_id}
                       onChange={(e) => setFormData({...formData, service_id: parseInt(e.target.value)})}
-                      className="w-full border rounded p-2"
+                      className="w-full border rounded p-2 bg-white"
                       required
                     />
                   </div>
@@ -186,7 +186,7 @@ const IncidentsPage = () => {
                       type="number"
                       value={formData.organization_id}
                       onChange={(e) => setFormData({...formData, organization_id: parseInt(e.target.value)})}
-                      className="w-full border rounded p-2"
+                      className="w-full border rounded p-2 bg-white"
                       required
                     />
                   </div>
